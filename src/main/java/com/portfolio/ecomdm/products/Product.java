@@ -1,4 +1,4 @@
-package com.portfolio.ecomdm.pdf;
+package com.portfolio.ecomdm.products;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,14 +8,16 @@ import lombok.Setter;
 public class Product {
 
     private int id;
-    private String title;
+    private String name;
     private String description;
     private Double price;
+    private String skuCode;
 
-    public Product(int id, String title, String description, Double price) {
+    public Product(int id, String name, String description, Double price, String skuCode) {
         this.id = id;
-        this.title = title;
+        this.name = name;
         this.description = description;
         this.price = price;
+        this.skuCode = skuCode;
     }
 }

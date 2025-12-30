@@ -1,5 +1,6 @@
 package com.portfolio.ecomdm.pdf;
 
+import com.portfolio.ecomdm.products.Product;
 import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
@@ -47,7 +48,7 @@ public class PDFController {
         String base64Pdf = Base64.getEncoder().encodeToString(pdfContent);
 
         try {
-            String objectName = "report-" + product.getTitle() + UUID.randomUUID() + ".pdf";
+            String objectName = "report-" + product.getName() + UUID.randomUUID() + ".pdf";
 
             minioClient.putObject(
                     PutObjectArgs.builder()

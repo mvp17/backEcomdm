@@ -7,6 +7,7 @@ import com.itextpdf.layout.properties.TextAlignment;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import com.portfolio.ecomdm.products.Product;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -21,7 +22,7 @@ public class PDFGenerator {
              Document document = new Document(pdfDocument)) {
 
             // Add Title
-            addTitleText(document, product.getTitle());
+            addTitleText(document, product.getName());
 
             // Add Table
             addProductTable(document, product);
@@ -52,7 +53,7 @@ public class PDFGenerator {
 
         // Add product details
         addTableRow(table, "ID", String.valueOf(product.getId()));
-        addTableRow(table, "Title", product.getTitle());
+        addTableRow(table, "Title", product.getName());
         addTableRow(table, "Description", product.getDescription());
         addTableRow(table, "Price", "$" + product.getPrice());
 

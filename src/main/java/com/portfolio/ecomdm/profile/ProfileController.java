@@ -1,16 +1,18 @@
 package com.portfolio.ecomdm.profile;
 
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.InputStream;
 import java.util.Base64;
+import java.util.Objects;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user/profile")
 public class ProfileController {
     private final MinioClient minioClient;
     private final String bucketName = "profile-pictures";
@@ -31,31 +33,29 @@ public class ProfileController {
         }
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+    @PostMapping("/upload-image")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file, @RequestParam("userId") String userId) {
         try {
-            // TODO: Add user data to the object name
-            String objectName = UUID.randomUUID() + "-" + file.getOriginalFilename();
+            //String objectName = userId + "/" + UUID.randomUUID() + "-" + file.getOriginalFilename();
 
+            // Upload new file
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
-                            .object(objectName)
+                            .object(userId)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
                             .build()
             );
 
-            // String imageUrl = String.format("http://localhost:9000/%s/%s", bucketName, objectName);
-
-            return ResponseEntity.ok(objectName);
+            return ResponseEntity.ok(userId);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Upload failed: " + e.getMessage());
         }
     }
 
-    @GetMapping("/download/{id}")
+    @GetMapping("/download-image/{id}")
     public ResponseEntity<String> getImageBase64(@PathVariable String id) {
         try (InputStream is = minioClient.getObject(
                 GetObjectArgs.builder().bucket(bucketName).object(id).build())) {
@@ -72,8 +72,8 @@ public class ProfileController {
 
             return ResponseEntity.ok(dataUri);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Error: " + e.getMessage());
+            return ResponseEntity.ok("");
+            // return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
         }
     }
 }
