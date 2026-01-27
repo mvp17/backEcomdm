@@ -1,23 +1,21 @@
 package com.portfolio.ecomdm.products;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+import java.math.BigDecimal;
 
-@Setter
-@Getter
+@Document(value = "product")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Product {
-
-    private int id;
+    @Id
+    private String id;
     private String name;
     private String description;
-    private Double price;
+    private String category;
+    private BigDecimal price;
     private String skuCode;
-
-    public Product(int id, String name, String description, Double price, String skuCode) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.price = price;
-        this.skuCode = skuCode;
-    }
 }

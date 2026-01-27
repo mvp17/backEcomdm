@@ -1,6 +1,7 @@
 services:
-  minio3:
+  minio:
     image: minio/minio
+    container_name: minio-diceFashion
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -10,5 +11,18 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - minio-data:/data
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb-diceFashion
+    ports:
+      - "27015:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo-data:/data/db
+
 volumes:
   minio-data:
+  mongo-data:
